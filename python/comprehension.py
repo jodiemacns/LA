@@ -74,22 +74,53 @@ print encoded_letters
 encoding_key = {}
 decoding_key = {}
 
+# Take the two list letters, and encoded_letters and turn them
+# into keys for decoding.
+# encoding_key[ letters ] = encoded_letters
+# decoding_key[ encode_letters ] = letters
 for k, v in zip(letters, encoded_letters):
 	encoding_key[k]=v
 	decoding_key[v]=k
 
+print 'Showing the encoding key'
+print '------------------------'
 print encoding_key
 
 encoded_text = ''
 for letter in raw_text:
+	# get(key[, default])
 	encoded_text += encoding_key.get(letter, letter)
 
+print 'Showing the encoding Text'
+print '------------------------'
 print encoded_text
 
+print 'Showing the encoding Text alternative way'
+print '-----------------------------------------'
+# Long form of how the zip / dict is working to create a dict
+# >>> lista = 'aa', 'BB'
+# >>> lista
+# ('aa', 'BB')
+# >>> listb = 'cc', 'DD'
+# >>> listb
+# ('cc', 'DD')
+# >>> listC = zip(lista, listb)
+# >>> listC
+# [('aa', 'cc'), ('BB', 'DD')]
+# >>> dicta = dict(listC)
+# >>> dicta
+# {'aa': 'cc', 'BB': 'DD'}
 encoding_key = dict(zip(letters,encoded_letters))
 decoding_key = dict(zip(encoding_key.values(),encoding_key.keys()))
+
 encoded_text = ''.join([encoding_key.get(w,w) for w in raw_text])
+print "Printing the encoded text"
+print "-------------------------"
 print encoded_text
+# join will make it a string
 decoded_text = ''.join([ decoding_key.get(w,w) for w in encoded_text])
+
+print "Printing the decoded text"
+print "-------------------------"
 print decoded_text
 
