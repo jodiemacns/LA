@@ -45,3 +45,49 @@ EC2
 RDS
 
 How does Netflix use these services.
+
+VPCS
+----
+Virtual private cloud (Your space)
+
+Private section of aws where you can allow / restrict access to the resources.
+
+FaceBook 
+
++-------------+     +-------------+  +-------------+   
+| Homepage(Me)|     | Their HP    |  | Other HP    |
+|             |     |             |  |             |
+| Post        |     | Post        |  | Post        |
+| Photos      |     | Photos      |  | Photos      |
+| Videos      |     | Videos      |  | Videos      |
++-------------+     +-------------+  +-------------+
+
+AWS
+
++-------------+     +-------------+  +-------------+   
+| Homepage(Me)|     | Their       |  | Other       |
+|             |     |             |  |             |
+| EC2         |     | EC2         |  | EC2         |
+| RDS         |     | RDS         |  | RDS         |
++-------------+     +-------------+  +-------------+
+
+
+EC2
+---
+
+Virtual computer used how you want it to be.
+
+RDS
+---
+Data Base 
+- storing customer account information.
+
+S3 
+--
+Unlimited Storage bucket
+(Outside of VPC)
+Long term storage of data.
+
+
+
+
