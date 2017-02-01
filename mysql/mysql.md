@@ -36,7 +36,7 @@ Constraints
 
 
 MariaDB Oracal fork of mysql
-============================
+----------------------------
 
 Install on Centos 7
 -------------------
@@ -50,7 +50,7 @@ sudo yum update
 sudo yum install MariaDB-server MariaDB-client
 ```
 Insert Into
-===========
+-----------
 ```
 NSERT  INTO tblCustomerInfo(custInfoFirstName, custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('Sean', 'Mace', '121 Main Street', '', 'Any town', 'NY', '43211', '2123445333');
 
@@ -64,7 +64,7 @@ INSERT INTO tblCustomerInforBkup SELECT * FROM tblCustomerInfo;
 ```
 
 SELECT FROM
-===========
+-----------
 ```
 SELECT custInfoCityName, custInfoState FROM tblCustomerInfo;
 
@@ -80,9 +80,10 @@ MariaDB [dbCustomerInfo]> SELECT custInfoLastName FROM tblCustomerInfo where cus
 ```
 
 Alter Table
-===========
+-----------
+- Add or drop table stuff
+
 ```
--Add or drop table stuff
 ALTER TABLE tblCustomerInfoBkup ADD custInfoDOB varchar(10);
 
 ALTER TABLE tblCustomerInfoBkup ALTER COLUMN custInfoDOB year;
@@ -94,14 +95,14 @@ MariaDB [dbCustomerInfo]>
 ALTER TABLE tblCustomerInfoBkup MODIFY COLUMN custInfoDOB year;
 ```
 DELETE FROM
-===========
+-----------
 ```
 DELETE FROM tblCustomerInfoBkup WHERE custInfoLastName<>'Smith';
 DELETE FROM tblCustomerInfoBkup WHERE custInfoLastName<>'Smith' AND custInfoLastName='mace';
 ```
 
 CREATE INDEX
-============
+------------
 When you want to find information more efficently.
 Updateing will take more time to update.
 
@@ -111,14 +112,15 @@ CREATE INDEX indexCustInfoID ON tblCustomerIDInfo (custID);
 CREATE INDEX indexCustInfoNames ON tblCustomerIDInfo (custInfoFirstName,custInfoLastName);
 ```
 DROP TABLE
-==========
+----------
+- Drop table
 
 TRUNCATE
-========
+--------
 Removing the data from the table.
 
 Auto Increment
-==============
+--------------
 ```
 MariaDB [dbCustomerInfo]> CREATE TABLE tblEmpInfo(empID int PRIMARY KEY AUTO_INCREMENT, empLastName varchar(50), empSSN varchar(11));
 Query OK, 0 rows affected (0.01 sec)
