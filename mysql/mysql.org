@@ -1,21 +1,19 @@
-Commands
-========
+--------------------------------------------------------------------------------
+* Commands
 Delete something:
-
-```
+#+BEGIN_SRC 
 mysql -p
 SHOW DATABASES;
 CREATE DATABASE dbtest;
 USE DATABASE dbCustomerInfo;
 CREATE TABLE tblCustomerInfo(custInfoFirstName varchar(50), custInfoLastName varchar(50), custInfoAddr1 varchar(50), custInfoAddr2 varchar(50), custInfoCityName varchar(50), custInfoState varchar(10), custInfoZipCode varchar(10),custInfoPhone varchar(12));
 CREATE TABLE tblCustomerIDInfo(custID varchar(10) PRIMARY KEY, custInfoFirstName varchar(50), custInfoLastName varchar(50), custInfoAddr1 varchar(50), custInfoAddr2 varchar(50), custInfoCityName varchar(50), custInfoState varchar(10), custInfoZipCode varchar(10),custInfoPhone varchar(12));
-```
-```
+#+END_SRC
+
+#+BEGIN_SRC 
+
 SHOW FIELDS FROM tblCustomerInfo;
 mysql> SHOW FIELDS FROM tblCustomerIDInfo;
-```
-
-``` 
  +-------------------+-------------+------+-----+---------+-------+
  | Field             | Type        | Null | Key | Default | Extra |
  +-------------------+-------------+------+-----+---------+-------+
@@ -29,30 +27,36 @@ mysql> SHOW FIELDS FROM tblCustomerIDInfo;
  | custInfoZipCode   | varchar(10) | YES  |     | NULL    |       |
  | custInfoPhone     | varchar(12) | YES  |     | NULL    |       |
  +-------------------+-------------+------+-----+---------+-------+
-```
-Constraints 
------------
+
+#+END_SRC
+
+--------------------------------------------------------------------------------
+* Constraints 
 - rules that need to apply to the table. 
 
 
-MariaDB Oracal fork of mysql
-----------------------------
 
-Install on Centos 7
--------------------
+--------------------------------------------------------------------------------
+* MariaDB Oracal fork of mysql
+
+--------------------------------------------------------------------------------
+* Install on Centos 7
 
 https://downloads.mariadb.org/mariadb/repositories/#mirror=babylon-ca&distro=CentOS&distro_release=centos7-amd64--centos7&version=5.5
-```
+
+#+BEGIN_SRC 
 cd /etc/yum.repos.d/
 vim MariaDB.repo (Copy and paste the info from the page.)
 
 sudo yum update
 sudo yum install MariaDB-server MariaDB-client
-```
-Insert Into
------------
-```
-NSERT  INTO tblCustomerInfo(custInfoFirstName, custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('Sean', 'Mace', '121 Main Street', '', 'Any town', 'NY', '43211', '2123445333');
+
+#+END_SRC
+** Insert Into
+
+#+BEGIN_SRC 
+
+INSERT  INTO tblCustomerInfo(custInfoFirstName, custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('Sean', 'Mace', '121 Main Street', '', 'Any town', 'NY', '43211', '2123445333');
 
 SELECT * FROM tblCustomerInfo;
 
@@ -61,11 +65,11 @@ CREATE TABLE tblCustomerInfoBkup(custInfoFirstName varchar(50), custInfoLastName
 INSERT  INTO tblCustomerInfoBkup(custInfoFirstName, custInfo
 LastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('John', 'Jonson', '111 Main Street', '', 'Any town', 'NY', '43211 ', '2123445544')
 INSERT INTO tblCustomerInforBkup SELECT * FROM tblCustomerInfo;
-```
+#+END_SRC
 
-SELECT FROM
------------
-```
+** SELECT FROM
+
+#+BEGIN_SRC 
 SELECT custInfoCityName, custInfoState FROM tblCustomerInfo;
 
 MariaDB [dbCustomerInfo]> SELECT custInfoLastName FROM tblCustomerInfo WHERE custInfoState='NY';
@@ -77,13 +81,13 @@ MariaDB [dbCustomerInfo]> SELECT custInfoLastName FROM tblCustomerInfo where cus
 | Mace             |
 +------------------+
 1 row in set (0.00 sec)
-```
+#+END_SRC
 
-Alter Table
------------
+--------------------------------------------------------------------------------
+** Alter Table
 - Add or drop table stuff
 
-```
+#+BEGIN_SRC 
 ALTER TABLE tblCustomerInfoBkup ADD custInfoDOB varchar(10);
 
 ALTER TABLE tblCustomerInfoBkup ALTER COLUMN custInfoDOB year;
@@ -93,36 +97,44 @@ ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that 
 MariaDB [dbCustomerInfo]> 
 
 ALTER TABLE tblCustomerInfoBkup MODIFY COLUMN custInfoDOB year;
-```
-DELETE FROM
------------
-```
+
+#+END_SRC
+
+--------------------------------------------------------------------------------
+** DELETE FROM
+
+#+BEGIN_SRC 
 DELETE FROM tblCustomerInfoBkup WHERE custInfoLastName<>'Smith';
 DELETE FROM tblCustomerInfoBkup WHERE custInfoLastName<>'Smith' AND custInfoLastName='mace';
-```
+#+END_SRC
 
-CREATE INDEX
-------------
+--------------------------------------------------------------------------------
+** CREATE INDEX
 When you want to find information more efficently.
 Updateing will take more time to update.
 
+
 ONLY on colums that will be searched often.
-```
+
+#+BEGIN_SRC 
 CREATE INDEX indexCustInfoID ON tblCustomerIDInfo (custID);
 CREATE INDEX indexCustInfoNames ON tblCustomerIDInfo (custInfoFirstName,custInfoLastName);
-```
-DROP TABLE
-----------
+#+END_SRC
+--------------------------------------------------------------------------------
+** DROP TABLE
 1. _Drop_ table
 2. ...
 
-TRUNCATE
+--------------------------------------------------------------------------------
+** TRUNCATE
 --------
 Removing the data from the table.
 
-Auto Increment
+--------------------------------------------------------------------------------
+** Auto Increment
 --------------
-```
+
+#+BEGIN_SRC 
 MariaDB [dbCustomerInfo]> CREATE TABLE tblEmpInfo(empID int PRIMARY KEY AUTO_INCREMENT, empLastName varchar(50), empSSN varchar(11));
 Query OK, 0 rows affected (0.01 sec)
 
@@ -191,12 +203,14 @@ MariaDB [dbCustomerInfo]> SHOW FIELDS FROM tblCustomerIDInfo;
 9 rows in set (0.00 sec)
 
 MariaDB [dbCustomerInfo]> 
+#+END_SRC
 
-```
-Sequel Functions
+--------------------------------------------------------------------------------
+* Sequel Functions
 ================
 
-Count function
---------------
+--------------------------------------------------------------------------------
+** Count function
+
 Returns info based off how it is asked.
 US
