@@ -1,0 +1,25 @@
+* Lecture: Installation and Service Configuration
+We are ready to install our PostgreSQL database engine. We will talk about where
+ to obtain the latest copy and configure our system for installing it. After 
+installation, we will walk through the initialization of the engine and then 
+how to set it for starting on boot.
+
+[[https://www.postgresql.org/download/linux/redhat/]]
+
+#+BEGIN_SRC 
+
+sudo /usr/pgsql-9.5/bin/postgresql95-setup initdb
+sestatus
+SELinux status:                 enabled
+SELinuxfs mount:                /sys/fs/selinux
+SELinux root directory:         /etc/selinux
+Loaded policy name:             targeted
+Current mode:                   enforcing
+Mode from config file:          enforcing
+Policy MLS status:              enabled
+Policy deny_unknown status:     allowed
+Max kernel policy version:      28
+
+
+
+#+END_SRC
