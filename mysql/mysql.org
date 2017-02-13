@@ -1,5 +1,6 @@
 --------------------------------------------------------------------------------
-* Commands
+* Lessons
+** Commands
 Delete something:
 #+BEGIN_SRC 
 mysql -p
@@ -31,16 +32,16 @@ mysql> SHOW FIELDS FROM tblCustomerIDInfo;
 #+END_SRC
 
 --------------------------------------------------------------------------------
-* Constraints 
+** Constraints 
 - rules that need to apply to the table. 
 
 
 
 --------------------------------------------------------------------------------
-* MariaDB Oracal fork of mysql
+** MariaDB Oracal fork of mysql
 
 --------------------------------------------------------------------------------
-* Install on Centos 7
+** Install on Centos 7
 
 https://downloads.mariadb.org/mariadb/repositories/#mirror=babylon-ca&distro=CentOS&distro_release=centos7-amd64--centos7&version=5.5
 
@@ -52,7 +53,7 @@ sudo yum update
 sudo yum install MariaDB-server MariaDB-client
 
 #+END_SRC
-** Insert Into
+*** Insert Into
 
 #+BEGIN_SRC 
 
@@ -62,12 +63,11 @@ SELECT * FROM tblCustomerInfo;
 
 CREATE TABLE tblCustomerInfoBkup(custInfoFirstName varchar(50), custInfoLastName varchar(50), custInfoAddr1 varchar(50), custInfoAddr2 varchar(50) , custInfoCityName varchar(50), custInfoState varchar(10), custInfoZipCode varchar(10) ,custInfoPhone varchar(12));
 
-INSERT  INTO tblCustomerInfoBkup(custInfoFirstName, custInfo
-LastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('John', 'Jonson', '111 Main Street', '', 'Any town', 'NY', '43211 ', '2123445544')
+INSERT INTO tblCustomerInfoBkup(custInfoFirstName,custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('John', 'Jonson', '111 Main Street', '', 'Any town', 'NY', '43211 ', '2123445544');
 INSERT INTO tblCustomerInforBkup SELECT * FROM tblCustomerInfo;
 #+END_SRC
 
-** SELECT FROM
+*** SELECT FROM
 
 #+BEGIN_SRC 
 SELECT custInfoCityName, custInfoState FROM tblCustomerInfo;
@@ -84,7 +84,7 @@ MariaDB [dbCustomerInfo]> SELECT custInfoLastName FROM tblCustomerInfo where cus
 #+END_SRC
 
 --------------------------------------------------------------------------------
-** Alter Table
+*** Alter Table
 - Add or drop table stuff
 
 #+BEGIN_SRC 
@@ -92,16 +92,12 @@ ALTER TABLE tblCustomerInfoBkup ADD custInfoDOB varchar(10);
 
 ALTER TABLE tblCustomerInfoBkup ALTER COLUMN custInfoDOB year;
 
-MariaDB [dbCustomerInfo]> ALTER TABLE tblCustomerInfoBkup ALTER COLUMN custInfoDOB year;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'year' at line 1
-MariaDB [dbCustomerInfo]> 
-
 ALTER TABLE tblCustomerInfoBkup MODIFY COLUMN custInfoDOB year;
 
 #+END_SRC
 
 --------------------------------------------------------------------------------
-** DELETE FROM
+*** DELETE FROM
 
 #+BEGIN_SRC 
 DELETE FROM tblCustomerInfoBkup WHERE custInfoLastName<>'Smith';
@@ -109,7 +105,7 @@ DELETE FROM tblCustomerInfoBkup WHERE custInfoLastName<>'Smith' AND custInfoLast
 #+END_SRC
 
 --------------------------------------------------------------------------------
-** CREATE INDEX
+*** CREATE INDEX
 When you want to find information more efficently.
 Updateing will take more time to update.
 
@@ -121,17 +117,17 @@ CREATE INDEX indexCustInfoID ON tblCustomerIDInfo (custID);
 CREATE INDEX indexCustInfoNames ON tblCustomerIDInfo (custInfoFirstName,custInfoLastName);
 #+END_SRC
 --------------------------------------------------------------------------------
-** DROP TABLE
+*** DROP TABLE
 1. _Drop_ table
 2. ...
 
 --------------------------------------------------------------------------------
-** TRUNCATE
+*** TRUNCATE
 --------
 Removing the data from the table.
 
 --------------------------------------------------------------------------------
-** Auto Increment
+*** Auto Increment
 --------------
 
 #+BEGIN_SRC 
@@ -206,11 +202,1072 @@ MariaDB [dbCustomerInfo]>
 #+END_SRC
 
 --------------------------------------------------------------------------------
-* Sequel Functions
+** Sequel Functions
 ================
 
 --------------------------------------------------------------------------------
-** Count function
+*** Count function
 
 Returns info based off how it is asked.
 US
+
+#+BEGIN_SRC 
+
+INSERT INTO tblCustomerInfo(custInfoFirstName,custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('John', 'Jonson', '111 Main Street', '', 'Any town', 'NY', '43211 ', '2123445544');
+INSERT INTO tblCustomerInfo(custInfoFirstName,custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('Jane', 'Jonson', '121 Main Street', '', 'Halifax', 'NS',  '43212 ', '3123445544');
+INSERT INTO tblCustomerInfo(custInfoFirstName,custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('Frank', 'Franco','141 Main Street', '', 'Any town', 'NY', '43213 ', '4123445544');
+INSERT INTO tblCustomerInfo(custInfoFirstName,custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('Fred', 'Rockey', '131 Main Street', '', 'Any town', 'NY', '43215 ', '5123445544');
+INSERT INTO tblCustomerInfo(custInfoFirstName,custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('Bill', 'Henry',  '191 Main Street', '', 'Any town', 'NY', '43214 ', '6123445544');
+
+SELECT * FROM tblCustomerInfo;
+>> MariaDB [dbCustomers]> SELECT * FROM tblCustomerInfo;
+>> +-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+>> | custInfoFirstName | custInfoLastName | custInfoAddr1   | custInfoAddr2 | custInfoCityName | custInfoState | custInfoZipCode | custInfoPhone |
+>> +-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+>> | John              | Jonson           | 111 Main Street |               | Any town         | NY            | 43211           | 2123445544    |
+>> | Jane              | Jonson           | 121 Main Street |               | Halifax          | NS            | 43212           | 3123445544    |
+>> | Frank             | Franco           | 141 Main Street |               | Any town         | NY            | 43213           | 4123445544    |
+>> | Fred              | Rockey           | 131 Main Street |               | Any town         | NY            | 43215           | 5123445544    |
+>> | Bill              | Henry            | 191 Main Street |               | Any town         | NY            | 43214           | 6123445544    |
+>> +-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+
+#+END_SRC
+
+Give me a number of records
+#+BEGIN_SRC 
+SELECT COUNT(*) FROM tblCustomerInfo;
+>> +----------+
+>> | COUNT(*) |
+>> +----------+
+>> |        5 |
+>> +----------+
+
+SELECT COUNT(DISTINCT custInfoLastName) FROM tblCustomerInfo;
++----------------------------------+
+| COUNT(DISTINCT custInfoLastName) |
++----------------------------------+
+|                                4 |
++----------------------------------+
+
+SELECT COUNT(custInfoState) FROM tblCustomerInfo;
+#+END_SRC
+
+** Average and sum functions
+
+#+BEGIN_SRC  
+
+CREATE TABLE tblInvoices(empID int PRIMARY KEY AUTO_INCREMENT, invCustName varchar(50), invNumberItems int(11));
+INSERT INTO tblInvoices(invCustName, invNumberItems) VALUES('John Smith', 22);
+INSERT INTO tblInvoices(invCustName, invNumberItems) VALUES('Jane Smith', 342);
+INSERT INTO tblInvoices(invCustName, invNumberItems) VALUES('Jane Jones', 52);
+INSERT INTO tblInvoices(invCustName, invNumberItems) VALUES('Toby Mez', 92);
+INSERT INTO tblInvoices(invCustName, invNumberItems) VALUES('Tony Johns', 111);
+INSERT INTO tblInvoices(invCustName, invNumberItems) VALUES('Clark Kent', 88);
+INSERT INTO tblInvoices(invCustName, invNumberItems) VALUES('Bruce Wayne', 41188);
+
+SELECT AVG(invNumberItems) FROM tblInvoices;
+
+MariaDB [dbCustomers]> SELECT AVG(invNumberItems) FROM tblInvoices;
++---------------------+
+| AVG(invNumberItems) |
++---------------------+
+|           5985.0000 |
++---------------------+
+
+SELECT COUNT(*), AVG(invNumberItems) FROM tblInvoices;
+
++----------+---------------------+
+| COUNT(*) | AVG(invNumberItems) |
++----------+---------------------+
+|        7 |           5985.0000 |
++----------+---------------------+
+
+SELECT SUM(invNumberItems) FROM tblInvoices;
+MariaDB [dbCustomers]> SELECT SUM(invNumberItems) FROM tblInvoices;
++---------------------+
+| SUM(invNumberItems) |
++---------------------+
+|               41895 |
++---------------------+
+1 row in set (0.00 sec)
+
+SELECT COUNT(*), AVG(invNumberItems), SUM(invNumberItems) FROM tblInvoices;
+
++----------+---------------------+---------------------+
+| COUNT(*) | AVG(invNumberItems) | SUM(invNumberItems) |
++----------+---------------------+---------------------+
+|        7 |           5985.0000 |               41895 |
++----------+---------------------+---------------------+
+
+#+END_SRC
+
+** Like Operator
+#+BEGIN_SRC 
+SELECT * FROM tblCustomerInfo where custInfoLastName='Jonson';
++-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+| custInfoFirstName | custInfoLastName | custInfoAddr1   | custInfoAddr2 | custInfoCityName | custInfoState | custInfoZipCode | custInfoPhone |
++-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+| John              | Jonson           | 111 Main Street |               | Any town         | NY            | 43211           | 2123445544    |
+| Jane              | Jonson           | 121 Main Street |               | Halifax          | NS            | 43212           | 3123445544    |
++-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+
+SELECT * FROM tblCustomerInfo where custInfoLastName LIKE 'J%';
++-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+| custInfoFirstName | custInfoLastName | custInfoAddr1   | custInfoAddr2 | custInfoCityName | custInfoState | custInfoZipCode | custInfoPhone |
++-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+| John              | Jonson           | 111 Main Street |               | Any town         | NY            | 43211           | 2123445544    |
+| Jane              | Jonson           | 121 Main Street |               | Halifax          | NS            | 43212           | 3123445544    |
++-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+
+SELECT * FROM tblCustomerInfo where custInfoLastName LIKE '%n%';
++-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+| custInfoFirstName | custInfoLastName | custInfoAddr1   | custInfoAddr2 | custInfoCityName | custInfoState | custInfoZipCode | custInfoPhone |
++-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+| John              | Jonson           | 111 Main Street |               | Any town         | NY            | 43211           | 2123445544    |
+| Jane              | Jonson           | 121 Main Street |               | Halifax          | NS            | 43212           | 3123445544    |
+| Frank             | Franco           | 141 Main Street |               | Any town         | NY            | 43213           | 4123445544    |
+| Bill              | Henry            | 191 Main Street |               | Any town         | NY            | 43214           | 6123445544    |
++-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+
+SELECT COUNT(*) FROM tblCustomerInfo WHERE custInfoLastName LIKE 'J%';
++----------+
+| COUNT(*) |
++----------+
+|        2 |
++----------+
+
+SELECT AVG(invNumberItems), SUM(invNumberItems), COUNT(*) FROM tblInvoices WHERE invCustName LIKE '%Smith';
++---------------------+---------------------+----------+
+| AVG(invNumberItems) | SUM(invNumberItems) | COUNT(*) |
++---------------------+---------------------+----------+
+|            182.0000 |                 364 |        2 |
++---------------------+---------------------+----------+
+
+SELECT invCustName,AVG(invNumberItems), SUM(invNumberItems), COUNT(*) FROM tblInvoices WHERE invCustName LIKE '%Smith';
++-------------+---------------------+---------------------+----------+
+| invCustName | AVG(invNumberItems) | SUM(invNumberItems) | COUNT(*) |
++-------------+---------------------+---------------------+----------+
+| John Smith  |            182.0000 |                 364 |        2 |
++-------------+---------------------+---------------------+----------+
+
+
+#+END_SRC
+
+** Create View
+A Static view of the data, instead of running a command over and over again.
+
+#+BEGIN_SRC  
+  
+CREATE VIEW myview AS SELECT COUNT(*),AVG(invNumberItems), SUM(invNumberItems) FROM tblInvoices WHERE invNumberItems > 50;
+MariaDB [dbCustomers]> SHOW TABLES;
++-----------------------+
+| Tables_in_dbCustomers |
++-----------------------+
+| myview                |
+| tblCustomerIDInfo     |
+| tblCustomerInfo       |
+| tblInvoices           |
++-----------------------+
+4 rows in set (0.00 sec)
+
+MariaDB [dbCustomers]> DROP TABLE myview;
+
+CREATE VIEW viewOverFifty AS SELECT COUNT(*),AVG(invNumberItems), SUM(invNumberItems) FROM tblInvoices WHERE invNumberItems > 50;
+Query OK, 0 rows affected (0.03 sec)
+
+MariaDB [dbCustomers]> SHOW TABLES;
++-----------------------+
+| Tables_in_dbCustomers |
++-----------------------+
+| tblCustomerIDInfo     |
+| tblCustomerInfo       |
+| tblInvoices           |
+| viewOverFifty         |
++-----------------------+
+4 rows in set (0.00 sec)
+
+MariaDB [dbCustomers]> SELECT * FROM viewOverFifty;
++----------+---------------------+---------------------+
+| COUNT(*) | AVG(invNumberItems) | SUM(invNumberItems) |
++----------+---------------------+---------------------+
+|        6 |           6978.8333 |               41873 |
++----------+---------------------+---------------------+
+1 row in set (0.00 sec)
+
+#+END_SRC
+** Inner Join
+#+BEGIN_SRC 
+
+ALTER TABLE tblCustomerIDInfo MODIFY custID int AUTO_INCREMENT; 
+
+INSERT INTO tblCustomerIDInfo(custInfoFirstName,custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('John', 'Jonson', '111 Main Street', '', 'Any town', 'NY', '43211 ', '2123445544');
+INSERT INTO tblCustomerIDInfo(custInfoFirstName,custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('Jane', 'Jonson', '121 Main Street', '', 'Halifax', 'NS',  '43212 ', '3123445544');
+INSERT INTO tblCustomerIDInfo(custInfoFirstName,custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('Frank', 'Franco','141 Main Street', '', 'Any town', 'NY', '43213 ', '4123445544');
+INSERT INTO tblCustomerIDInfo(custInfoFirstName,custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('Fred', 'Rockey', '131 Main Street', '', 'Any town', 'NY', '43215 ', '5123445544');
+INSERT INTO tblCustomerIDInfo(custInfoFirstName,custInfoLastName,custInfoAddr1,custInfoAddr2,custInfoCityName,custInfoState,custInfoZipCode,custInfoPhone) VALUES ('Bill', 'Henry',  '191 Main Street', '', 'Any town', 'NY', '43214 ', '6123445544');
+
+CREATE TABLE tblOrders(ordID int(11) PRIMARY KEY AUTO_INCREMENT, custID int(11), ordDate date);
+
+INSERT INTO tblOrders(custID,ordDate) VALUES(2, '2015-06-11');
+INSERT INTO tblOrders(custID,ordDate) VALUES(1, '2015-06-12');
+INSERT INTO tblOrders(custID,ordDate) VALUES(3, '2015-07-12');
+INSERT INTO tblOrders(custID,ordDate) VALUES(1, '2015-03-12');
+
+SELECT * FROM tblOrders;
++-------+--------+------------+
+| ordID | custID | ordDate    |
++-------+--------+------------+
+|     1 |      2 | 2015-06-11 |
+|     2 |      1 | 2015-06-12 |
+|     3 |      3 | 2015-07-12 |
+|     4 |      1 | 2015-03-12 |
++-------+--------+------------+
+SELECT tblOrders.ordID,tblCustomerIDInfo.custInfoLastName, tblCustomerIDInfo.custInfoFirstName, tblOrders.ordDate FROM tblOrders INNER JOIN tblCustomerIDInfo ON tblOrders, custID=tblCustomerIDInfo.custody;
+
+
+SELECT tblOrders.ordID, tblCustomerIDInfo.custInfoLastName, tblOrders.ordDate FROM tblOrders INNER JOIN tblCustomerIDInfo ON tblOrders.custID=tblCustomerIDInfo.custID;
++-------+------------------+------------+
+| ordID | custInfoLastName | ordDate    |
++-------+------------------+------------+
+|     2 | Jonson           | 2015-06-12 |
+|     4 | Jonson           | 2015-03-12 |
+|     1 | Jonson           | 2015-06-11 |
+|     3 | Franco           | 2015-07-12 |
++-------+------------------+------------+
+
+#+END_SRC
+
+** Left Join
+Left Outer Joins show records from the left table even if they do not have a matching relational record in the right.
+#+BEGIN_SRC 
+
+SELECT tblCustomerIDInfo.custInfoLastName, tblOrders.ordID FROM tblCustomerIDInfo LEFT JOIN tblOrders ON tblCustomerIDInfo.custID=tblOrders.custID ORDER BY tblCustomerIDInfo.custInfoLastName;
++------------------+-------+
+| custInfoLastName | ordID |
++------------------+-------+
+| Franco           |     3 |
+| Henry            |  NULL |
+| Jonson           |     4 |
+| Jonson           |     1 |
+| Jonson           |     2 |
+| Rockey           |  NULL |
++------------------+-------+
+
+#+END_SRC
+** Right Join
+
+Right Joins will show all records from the Right table even if there is no matching relational record in the left table.
+
+#+BEGIN_SRC 
+SHOW FIELDS FROM tblOrders;
++---------+---------+------+-----+---------+----------------+
+| Field   | Type    | Null | Key | Default | Extra          |
++---------+---------+------+-----+---------+----------------+
+| ordID   | int(11) | NO   | PRI | NULL    | auto_increment |
+| custID  | int(11) | YES  |     | NULL    |                |
+| ordDate | date    | YES  |     | NULL    |                |
++---------+---------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+MariaDB [dbCustomers]> SHOW FIELDS FROM tblCustomerIDInfo;
++-------------------+-------------+------+-----+---------+----------------+
+| Field             | Type        | Null | Key | Default | Extra          |
++-------------------+-------------+------+-----+---------+----------------+
+| custID            | int(11)     | NO   | PRI | NULL    | auto_increment |
+| custInfoFirstName | varchar(50) | YES  |     | NULL    |                |
+| custInfoLastName  | varchar(50) | YES  |     | NULL    |                |
+| custInfoAddr1     | varchar(50) | YES  |     | NULL    |                |
+| custInfoAddr2     | varchar(50) | YES  |     | NULL    |                |
+| custInfoCityName  | varchar(50) | YES  |     | NULL    |                |
+| custInfoState     | varchar(10) | YES  |     | NULL    |                |
+| custInfoZipCode   | varchar(10) | YES  |     | NULL    |                |
+| custInfoPhone     | varchar(12) | YES  |     | NULL    |                |
++-------------------+-------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+MariaDB [dbCustomers]> SELECT tblOrders.ordID, tblCustomerIDInfo.custInfoLastName FROM tblOrders RIGHT JOIN tblCustomerIDInfo ON tblOrders.custID=tblCustomerIDInfo.custID ORDER BY tblOrders.ordID;
++-------+------------------+
+| ordID | custInfoLastName |
++-------+------------------+
+|  NULL | Rockey           |
+|  NULL | Henry            |
+|     1 | Jonson           |
+|     2 | Jonson           |
+|     3 | Franco           |
+|     4 | Jonson           |
++-------+------------------+
+6 rows in set (0.01 sec)
+
+MariaDB [dbCustomers]> 
+
+#+END_SRC
+
+** Full Join
+A Full Join will show all records on both the left and right tables regardless of matching relational records in either.
+
+My SQL does not support Full outer join.
+#+BEGIN_SRC 
+SELECT tblCustomerIDInfo.custInfoLastName, tblOrders.ordID FROM tblCustomerIDInfo FULL OUTTER JOIN tblOrders ON tblCustomerIDInfo.custID=tblOrders.custID;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'OUTTER JOIN tblOrders ON tblCustomerIDInfo.custID=tblOrders.custID' at line 1
+#+END_SRC
+
+** Unions
+A Union is the concatenation/combination of multiple select statements from one or more tables. Learn also how to use it to generate a full join in those DBs that do not support it directly.
+
+#+BEGIN_SRC 
+SHOW FIELDS FROM tblOrders;
++---------+---------+------+-----+---------+----------------+
+| Field   | Type    | Null | Key | Default | Extra          |
++---------+---------+------+-----+---------+----------------+
+| ordID   | int(11) | NO   | PRI | NULL    | auto_increment |
+| custID  | int(11) | YES  |     | NULL    |                |
+| ordDate | date    | YES  |     | NULL    |                |
++---------+---------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+MariaDB [dbCustomers]> SHOW FIELDS FROM tblCustomerIDInfo;
++-------------------+-------------+------+-----+---------+----------------+
+| Field             | Type        | Null | Key | Default | Extra          |
++-------------------+-------------+------+-----+---------+----------------+
+| custID            | int(11)     | NO   | PRI | NULL    | auto_increment |
+| custInfoFirstName | varchar(50) | YES  |     | NULL    |                |
+| custInfoLastName  | varchar(50) | YES  |     | NULL    |                |
+| custInfoAddr1     | varchar(50) | YES  |     | NULL    |                |
+| custInfoAddr2     | varchar(50) | YES  |     | NULL    |                |
+| custInfoCityName  | varchar(50) | YES  |     | NULL    |                |
+| custInfoState     | varchar(10) | YES  |     | NULL    |                |
+| custInfoZipCode   | varchar(10) | YES  |     | NULL    |                |
+| custInfoPhone     | varchar(12) | YES  |     | NULL    |                |
++-------------------+-------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+SELECT tblCustomerIDInfo.custID,tblCustomerIDInfo.custInfoLastName,tblCustomerIDInfo.custInfoFirstName FROM tblCustomerIDInfo;
++--------+------------------+-------------------+
+| custID | custInfoLastName | custInfoFirstName |
++--------+------------------+-------------------+
+|      1 | Jonson           | John              |
+|      2 | Jonson           | Jane              |
+|      3 | Franco           | Frank             |
+|      4 | Rockey           | Fred              |
+|      5 | Henry            | Bill              |
++--------+------------------+-------------------+
+5 rows in set (0.00 sec)
+
+SELECT tblCustomerIDInfo.custID,tblCustomerIDInfo.custInfoLastName,tblCustomerIDInfo.custInfoFirstName FROM tblCustomerIDInfo UNION SELECT * FROM tblOrders;
++--------+------------------+-------------------+
+| custID | custInfoLastName | custInfoFirstName |
++--------+------------------+-------------------+
+|      1 | Jonson           | John              |
+|      2 | Jonson           | Jane              |
+|      3 | Franco           | Frank             |
+|      4 | Rockey           | Fred              |
+|      5 | Henry            | Bill              |
+|      1 | 2                | 2015-06-11        |
+|      2 | 1                | 2015-06-12        |
+|      3 | 3                | 2015-07-12        |
+|      4 | 1                | 2015-03-12        |
++--------+------------------+-------------------+
+
+
+
+#+END_SRC
+
+#+BEGIN_SRC 
+
+SHOW TABLES;
++-----------------------+
+| Tables_in_dbCustomers |
++-----------------------+
+| tblCustomerIDInfo     |
+| tblCustomerInfo       |
+| tblInvoices           |
+| tblOrders             |
+| viewOverFifty         |
++-----------------------+
+5 rows in set (0.00 sec)
+
+MariaDB [dbCustomers]> SELECT * FROM tblOrders;
++-------+--------+------------+
+| ordID | custID | ordDate    |
++-------+--------+------------+
+|     1 |      2 | 2015-06-11 |
+|     2 |      1 | 2015-06-12 |
+|     3 |      3 | 2015-07-12 |
+|     4 |      1 | 2015-03-12 |
+|     5 |   1234 | 2001-06-01 |
+|     6 |   1114 | 2001-06-01 |
++-------+--------+------------+
+6 rows in set (0.00 sec)
+
+MariaDB [dbCustomers]> SELECT * FROM tblCustomerIDInfo;
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+| custID | custInfoFirstName | custInfoLastName | custInfoAddr1   | custInfoAddr2 | custInfoCityName | custInfoState | custInfoZipCode | custInfoPhone |
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+|      1 | John              | Jonson           | 111 Main Street |               | Any town         | NY            | 43211           | 2123445544    |
+|      2 | Jane              | Jonson           | 121 Main Street |               | Halifax          | NS            | 43212           | 3123445544    |
+|      3 | Frank             | Franco           | 141 Main Street |               | Any town         | NY            | 43213           | 4123445544    |
+|      4 | Fred              | Rockey           | 131 Main Street |               | Any town         | NY            | 43215           | 5123445544    |
+|      5 | Bill              | Henry            | 191 Main Street |               | Any town         | NY            | 43214           | 6123445544    |
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+5 rows in set (0.00 sec)
+
+SELECT tblCustomerIDInfo.custInfoLastName, tblOrders.ordID FROM tblCustomerIDInfo LEFT JOIN tblOrders ON tblCustomerIDInfo.custID=tblOrders.custID UNION SELECT tblCustomerIDInfo.custInfoLastName,tblOrders.ordID FROM tblCustomerIDInfo RIGHT JOIN tblOrders ON tblOrders.custID=tblCustomerIDInfo.custID;
++------------------+-------+
+| custInfoLastName | ordID |
++------------------+-------+
+| Jonson           |     1 |
+| Jonson           |     2 |
+| Franco           |     3 |
+| Jonson           |     4 |
+| Rockey           |  NULL |
+| Henry            |  NULL |
+| NULL             |     5 |
+| NULL             |     6 |
++------------------+-------+
+
+#+END_SRC
+
+** Sorting Records
+Learn how to sort records in ascending or descending order depending on what and how you want to see the results. Use this to mimc certain SQL functions that are not supported universally.
+
+#+BEGIN_SRC 
+SHOW FIELDS FROM tblCustomerIDInfo;
++-------------------+-------------+------+-----+---------+----------------+
+| Field             | Type        | Null | Key | Default | Extra          |
++-------------------+-------------+------+-----+---------+----------------+
+| custID            | int(11)     | NO   | PRI | NULL    | auto_increment |
+| custInfoFirstName | varchar(50) | YES  |     | NULL    |                |
+| custInfoLastName  | varchar(50) | YES  |     | NULL    |                |
+| custInfoAddr1     | varchar(50) | YES  |     | NULL    |                |
+| custInfoAddr2     | varchar(50) | YES  |     | NULL    |                |
+| custInfoCityName  | varchar(50) | YES  |     | NULL    |                |
+| custInfoState     | varchar(10) | YES  |     | NULL    |                |
+| custInfoZipCode   | varchar(10) | YES  |     | NULL    |                |
+| custInfoPhone     | varchar(12) | YES  |     | NULL    |                |
++-------------------+-------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+MariaDB [dbCustomers]> SELECT * FROM tblCustomerIDInfo ORDER BY custID ASC LIMIT 1;
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+| custID | custInfoFirstName | custInfoLastName | custInfoAddr1   | custInfoAddr2 | custInfoCityName | custInfoState | custInfoZipCode | custInfoPhone |
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+|      1 | John              | Jonson           | 111 Main Street |               | Any town         | NY            | 43211           | 2123445544    |
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+1 row in set (0.00 sec)
+
+MariaDB [dbCustomers]> SELECT * FROM tblCustomerIDInfo ORDER BY custID ASC;
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+| custID | custInfoFirstName | custInfoLastName | custInfoAddr1   | custInfoAddr2 | custInfoCityName | custInfoState | custInfoZipCode | custInfoPhone |
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+|      1 | John              | Jonson           | 111 Main Street |               | Any town         | NY            | 43211           | 2123445544    |
+|      2 | Jane              | Jonson           | 121 Main Street |               | Halifax          | NS            | 43212           | 3123445544    |
+|      3 | Frank             | Franco           | 141 Main Street |               | Any town         | NY            | 43213           | 4123445544    |
+|      4 | Fred              | Rockey           | 131 Main Street |               | Any town         | NY            | 43215           | 5123445544    |
+|      5 | Bill              | Henry            | 191 Main Street |               | Any town         | NY            | 43214           | 6123445544    |
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+5 rows in set (0.00 sec)
+
+SELECT * FROM tblCustomerIDInfo ORDER BY custInfoLastName ASC;
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+| custID | custInfoFirstName | custInfoLastName | custInfoAddr1   | custInfoAddr2 | custInfoCityName | custInfoState | custInfoZipCode | custInfoPhone |
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+|      3 | Frank             | Franco           | 141 Main Street |               | Any town         | NY            | 43213           | 4123445544    |
+|      5 | Bill              | Henry            | 191 Main Street |               | Any town         | NY            | 43214           | 6123445544    |
+|      1 | John              | Jonson           | 111 Main Street |               | Any town         | NY            | 43211           | 2123445544    |
+|      2 | Jane              | Jonson           | 121 Main Street |               | Halifax          | NS            | 43212           | 3123445544    |
+|      4 | Fred              | Rockey           | 131 Main Street |               | Any town         | NY            | 43215           | 5123445544    |
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+
+SELECT * FROM tblCustomerIDInfo ORDER BY custID DESC LIMIT 1;
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+| custID | custInfoFirstName | custInfoLastName | custInfoAddr1   | custInfoAddr2 | custInfoCityName | custInfoState | custInfoZipCode | custInfoPhone |
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+|      5 | Bill              | Henry            | 191 Main Street |               | Any town         | NY            | 43214           | 6123445544    |
++--------+-------------------+------------------+-----------------+---------------+------------------+---------------+-----------------+---------------+
+1 row in set (0.00 sec)
+
+
+#+END_SRC
+
+** Minimum and Maximum
+Use built in SQL Functions to determine the maximum and minimum values from within our records sets.
+
+*** Setup
+
+#+BEGIN_SRC 
+CREATE TABLE tblCustomers(custID int PRIMARY KEY AUTO_INCREMENT, custLastName varchar(11), custFirstName varchar(11));
+
+INSERT INTO tblCustomers(custLastName, custFirstName) VALUES ('Smith', 'John');
+INSERT INTO tblCustomers(custLastName, custFirstName) VALUES ('Cena', 'Jon');
+INSERT INTO tblCustomers(custLastName, custFirstName) VALUES ('Wayne', 'Bruce');
+INSERT INTO tblCustomers(custLastName, custFirstName) VALUES ('Kent', 'Clark');
+INSERT INTO tblCustomers(custLastName, custFirstName) VALUES ('Prince', 'Diana');
+INSERT INTO tblCustomers(custLastName, custFirstName) VALUES ('Stewart', 'John');
+INSERT INTO tblCustomers(custLastName, custFirstName) VALUES ('West', 'Wally');
+INSERT INTO tblCustomers(custLastName, custFirstName) VALUES ('Luthor', 'Lex');
+
+SELECT * FROM tblCustomers;
++--------+--------------+---------------+
+| custID | custLastName | custFirstName |
++--------+--------------+---------------+
+|      1 | Smith        | John          |
+|      2 | Cena         | Jon           |
+|      3 | Wayne        | Bruce         |
+|      4 | Kent         | Clark         |
+|      5 | Prince       | Diana         |
+|      6 | Stewart      | John          |
+|      7 | West         | Wally         |
+|      8 | Luthor       | Lex           |
+
+#+END_SRC
+
+*** Examples
+#+BEGIN_SRC 
+SELECT MIN(custID) FROM tblCustomers;
++-------------+
+| MIN(custID) |
++-------------+
+|           1 |
++-------------+
+
+MariaDB [dbCustomers]> SELECT MAX(custID) FROM tblCustomers;
++-------------+
+| MAX(custID) |
++-------------+
+|           8 |
++-------------+
+SELECT MIN(custID),custLastName FROM tblCustomers;
++-------------+--------------+
+| MIN(custID) | custLastName |
++-------------+--------------+
+|           1 | Smith        |
++-------------+--------------+
+
+SELECT MAX(custID),custLastName FROM tblCustomers;
++-------------+--------------+
+| MAX(custID) | custLastName |
++-------------+--------------+
+|           8 | Smith        |
++-------------+--------------+
+
+SELECT custID,custLastName,custFirstName FROM tblCustomers WHERE custID=(SELECT MAX(custID) FROM tblCustomers);
++--------+--------------+---------------+
+| custID | custLastName | custFirstName |
++--------+--------------+---------------+
+|      8 | Luthor       | Lex           |
++--------+--------------+---------------+
+
+#+END_SRC   
+
+** Upper and Lower Case Conversions
+
+Again using SQL functions to provide different views of our data without changing any of the underlying values or structures.
+   
+#+BEGIN_SRC  
+SELECT UCASE(custInfoFirstName), UCASE(custInfoLastName) FROM tblCustomerIDInfo;
++--------------------------+-------------------------+
+| UCASE(custInfoFirstName) | UCASE(custInfoLastName) |
++--------------------------+-------------------------+
+| JOHN                     | JONSON                  |
+| JANE                     | JONSON                  |
+| FRANK                    | FRANCO                  |
+| FRED                     | ROCKEY                  |
+| BILL                     | HENRY                   |
++--------------------------+-------------------------+
+
+SELECT LCASE(custInfoFirstName), UCASE(custInfoLastName) FROM tblCustomerIDInfo;
++--------------------------+-------------------------+
+| LCASE(custInfoFirstName) | UCASE(custInfoLastName) |
++--------------------------+-------------------------+
+| john                     | JONSON                  |
+| jane                     | JONSON                  |
+| frank                    | FRANCO                  |
+| fred                     | ROCKEY                  |
+| bill                     | HENRY                   |
++--------------------------+-------------------------+
+
+#+END_SRC
+
+** Now()
+See how the Now() function works and how we can use it when creating data views 
+to maintain historical change records for our products table.
+*** Setup
+
+#+BEGIN_SRC 
+
+CREATE TABLE tblProducts(prodID int(11) PRIMARY KEY AUTO_INCREMENT, prodName varchar(20), prodDesc varchar(100), prodPrice float);
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [dbCustomers]> SHOW TABLES
+    -> ;
++-----------------------+
+| Tables_in_dbCustomers |
++-----------------------+
+| tblCustomerIDInfo     |
+| tblCustomerInfo       |
+| tblCustomers          |
+| tblInvoices           |
+| tblOrders             |
+| tblProducts           |
+| viewOverFifty         |
++-----------------------+
+7 rows in set (0.00 sec)
+
+MariaDB [dbCustomers]> SHOW FIELDS FROM tblProducts;
++-----------+--------------+------+-----+---------+----------------+
+| Field     | Type         | Null | Key | Default | Extra          |
++-----------+--------------+------+-----+---------+----------------+
+| prodID    | int(11)      | NO   | PRI | NULL    | auto_increment |
+| prodName  | varchar(20)  | YES  |     | NULL    |                |
+| prodDesc  | varchar(100) | YES  |     | NULL    |                |
+| prodPrice | float        | YES  |     | NULL    |                |
++-----------+--------------+------+-----+---------+----------------+
+
+INSERT INTO tblProducts (ProdName, prodDesc, prodPrice) VALUES ("Prod1", "Description 1", 9.95);
+INSERT INTO tblProducts (ProdName, prodDesc, prodPrice) VALUES ("Prod1", "Description 2", 19.95);
+INSERT INTO tblProducts (ProdName, prodDesc, prodPrice) VALUES ("Prod1", "Description 3", 119.95);
+INSERT INTO tblProducts (ProdName, prodDesc, prodPrice) VALUES ("Prod1", "Description 4", 1199.95);
+INSERT INTO tblProducts (ProdName, prodDesc, prodPrice) VALUES ("Prod1", "Description 5", 1.95);
+SELECT * FROM tblProducts;
++--------+----------+---------------+-----------+
+| prodID | prodName | prodDesc      | prodPrice |
++--------+----------+---------------+-----------+
+|      1 | Prod1    | Description 1 |      9.95 |
+|      2 | Prod1    | Description 2 |     19.95 |
+|      3 | Prod1    | Description 3 |    119.95 |
+|      4 | Prod1    | Description 4 |   1199.95 |
+|      5 | Prod1    | Description 5 |      1.95 |
++--------+----------+---------------+-----------+
+
+SELECT prodID, prodName, prodDesc, prodPrice, Now() As prodPriceDate FROM tblProducts;
++--------+----------+---------------+-----------+---------------------+
+| prodID | prodName | prodDesc      | prodPrice | prodPriceDate       |
++--------+----------+---------------+-----------+---------------------+
+|      1 | Prod1    | Description 1 |      9.95 | 2017-02-02 21:19:37 |
+|      2 | Prod1    | Description 2 |     19.95 | 2017-02-02 21:19:37 |
+|      3 | Prod1    | Description 3 |    119.95 | 2017-02-02 21:19:37 |
+|      4 | Prod1    | Description 4 |   1199.95 | 2017-02-02 21:19:37 |
+|      5 | Prod1    | Description 5 |      1.95 | 2017-02-02 21:19:37 |
++--------+----------+---------------+-----------+---------------------+
+
+
+#+END_SRC
+* Exercises
+** Create Database, Database User and Tables
+1. Log into the MySQL server instance as the root user with the already created credentials.
+   #+BEGIN_SRC 
+   
+   #+END_SRC
+2. After logging in, list the current databases already created on the instance.
+3. Create a new database named "dbTest". Once the database is created, list all databases again on the instance to verify.
+4. Create a user called '*testuser*' that is granted all permissions on the 'dbTest' database created above. Make sure that user is able to log in from the local system and has a password assigned. Once the user is created and access to the database granted, be sure to reload the privileges and then log out.
+5. Verify the user can login and access the database created. Once logged in, create two tables called "tblVendors" and "tblOrders" structured as follows:
+tblVendors
+Field: vendorID, numeric type, autoincremented, primary key
+Field: vendorName, text, length of 50 characters or less
+tblOrders
+Field: orderID, numeric type, autoincremented, primary key
+Field: orderVendorID, numeric type (match type to tbleVendors::vendorID)
+Field: orderDate, date or timestamp type
+6. Once created, list the tables and field for each to verify.
+
+*** Answer
+#+BEGIN_SRC  
+   
+CREATE DATABASE dbTest;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [dbCustomers]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| dbCustomers        |
+| dbTest             |
+| mysql              |
+| performance_schema |
++--------------------+
+5 rows in set (0.00 sec)
+
+CREATE USER 'testuser'@'localhost' IDENTIFIED BY '123456';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [dbCustomers]> SELECT user, host from mysql.user;
++----------+-----------------------------+
+| user     | host                        |
++----------+-----------------------------+
+| root     | 127.0.0.1                   |
+| root     | ::1                         |
+| root     | jodiemacns1.mylabserver.com |
+| root     | localhost                   |
+| testuser | localhost                   |
++----------+-----------------------------+
+5 rows in set (0.00 sec)
+GRANT ALL PRIVILEGES ON dbTest TO 'testuser'@'localhost';
+
+SELECT user,host,password FROM mysql.user;
++----------+-----------------------------+-------------------------------------------+
+| user     | host                        | password                                  |
++----------+-----------------------------+-------------------------------------------+
+| root     | localhost                   | *7EBD927BA71D94642131635D29D1E7DF3887F409 |
+| root     | jodiemacns1.mylabserver.com | *7EBD927BA71D94642131635D29D1E7DF3887F409 |
+| root     | 127.0.0.1                   | *7EBD927BA71D94642131635D29D1E7DF3887F409 |
+| root     | ::1                         | *7EBD927BA71D94642131635D29D1E7DF3887F409 |
+| testuser | localhost                   | *6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 |
++----------+-----------------------------+-------------------------------------------+
+
+FLUSH PRIVILEGES;
+
+quit;
+
+mysql -u testuser -p
+
+SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| dbTest             |
++--------------------+
+2 rows in set (0.00 sec)
+
+MariaDB [(none)]> USE dbTest;
+
+SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| dbTest             |
++--------------------+
+2 rows in set (0.00 sec)
+
+MariaDB [(none)]> USE dbTest;
+Database changed
+CREATE TABLE tblVendors (vendorID int PRIMARY KEY AUTO_INCREMENT, vendorName varchar(50));
+Query OK, 0 rows affected (0.00 sec)
+
+CREATE TABLE tblOrders ( orderID int PRIMARY KEY AUTO_INCREMENT, orderID int, orderDate date);
+CREATE TABLE tblOrders ( orderID int PRIMARY KEY AUTO_INCREMENT, orderVendorID int, orderDate date);
+
+   SHOW FIELDS FROM tblVendors;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| vendorID   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| vendorName | varchar(50) | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+MariaDB [dbTest]> SHOW FIELDS FROM tblOrders;
++---------------+---------+------+-----+---------+----------------+
+| Field         | Type    | Null | Key | Default | Extra          |
++---------------+---------+------+-----+---------+----------------+
+| orderID       | int(11) | NO   | PRI | NULL    | auto_increment |
+| orderVendorID | int(11) | YES  |     | NULL    |                |
+| orderDate     | date    | YES  |     | NULL    |                |
++---------------+---------+------+-----+---------+----------------+
+
+#+END_SRC
+
+** Exercise: Creating Tables with Constraints
+1. Using the previously created 'testuser' and the 'dbTest' database, log in and select the database to create our structures in. List the current tables.
+2. Create a table, using the indicated constraints, as follows:
+- Name: tblAcctExec
+- Field: execID - Primary Key, autoincrement, not null
+- Field: execLastName - Text, Length of 35, not null
+- Field: execFirstName - Text, Length of 35, not null
+- Field: execSalary - Integer, not null
+3. Create a table, using the indicated constraints, as follows: 
+- Name: tblCustomerInfo
+- Field: customerID - Primary Key, autoincrement, not null
+- Field: customerLastName - Text, Length of 35, not null
+- Field: customerFirstName - Text, Length of 35, not null
+- Field: customerEmail - Text, Length of 50, not null
+4. List each table in the database
+5. List the fields for all tables in the database and check that the constraints of entry match those intended during creation.
+ 
+*** Answer:
+#+BEGIN_SRC  
+
+CREATE TABLE tblAcctExec (execID INT PRIMARY KEY AUTO_INCREMENT NOT NULL, execLastName varchar(35) NOT NULL, execFirstName varchar(35) NOT NULL, execSallary int NOT NULL);
+Query OK, 0 rows affected (0.01 sec)
+
+CREATE TABLE tblCustomerInfo (customerID INT PRIMARY KEY AUTO_INCREMENT NOT NULL, customerLastName varchar(35) NOT NULL, customerFirstName varchar(35) NOT NULL, customerEmail varchar(50) NOT NULL);
+Query OK, 0 rows affected (0.01 sec)
+
+SHOW FIELDS FROM tblAcctExec;
++---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
++---------------+-------------+------+-----+---------+----------------+
+| execID        | int(11)     | NO   | PRI | NULL    | auto_increment |
+| execLastName  | varchar(35) | NO   |     | NULL    |                |
+| execFirstName | varchar(35) | NO   |     | NULL    |                |
+| execSallary   | int(11)     | NO   |     | NULL    |                |
++---------------+-------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+SHOW FIELDS FROM tblCustomerInfo;
++-------------------+-------------+------+-----+---------+----------------+
+| Field             | Type        | Null | Key | Default | Extra          |
++-------------------+-------------+------+-----+---------+----------------+
+| customerID        | int(11)     | NO   | PRI | NULL    | auto_increment |
+| customerLastName  | varchar(35) | NO   |     | NULL    |                |
+| customerFirstName | varchar(35) | NO   |     | NULL    |                |
+| customerEmail     | varchar(50) | NO   |     | NULL    |                |
+
+#+END_SRC
+** Exercise: Altering Table Structures
+1. Using the 'testuser' and 'dbTest' database created in our earlier exercises, login to the database instance and choose the appropriate database for our use. List all tables in that database;
+2. Display the Vendors table and it's columns with constraints. Notice that although the Vendor ID cannot be NULL, the Vendor Name can be. As a result, we could have an ID with no associated name. Alter the table so that the Vendor Name is constrained so as to not allow NULL values. List the new constraints for the table.
+3. Display the Account Executive table and it's columns and constraints. Alter the table to add another column as follows:
+- Field: execPhoneNumber - Integer, cannot be NULL
+4. Display the new constraints on the Account Executive table to verify the change.
+*** Answer:
+#+BEGIN_SRC  
+
+SHOW FIELDS FROM tblVendors;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| vendorID   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| vendorName | varchar(50) | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+
+ALTER TABLE tblVendors MODIFY COLUMN vendorName varchar(50) NOT NULL;
+
+SHOW FIELDS FROM tblVendors;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| vendorID   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| vendorName | varchar(50) | NO   |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+
+ALTER TABLE tblAcctExec ADD COLUMN execPhoneNumber int(11) NOT NULL;
+SHOW FIELDS FROM tblAcctExec;
++-----------------+-------------+------+-----+---------+----------------+
+| Field           | Type        | Null | Key | Default | Extra          |
++-----------------+-------------+------+-----+---------+----------------+
+| execID          | int(11)     | NO   | PRI | NULL    | auto_increment |
+| execLastName    | varchar(35) | NO   |     | NULL    |                |
+| execFirstName   | varchar(35) | NO   |     | NULL    |                |
+| execSallary     | int(11)     | NO   |     | NULL    |                |
+| execPhoneNumber | int(11)     | NO   |     | NULL    |                |
++-----------------+-------------+------+-----+---------+----------------+
+
+#+END_SRC    
+
+
+    
+** Exercise: Insert and Select Records in a Table
+1. Using the previously created 'testuser' and 'dbTest' database, log into MySQL and change to that database.
+2. Insert records matching the indicated list below into the table called 'tblVendors':
+tblVendors
+Record List: IBM, Oracle, Verizon, Walmart, Time Warner, LG, Sony, Panasonic
+3. Insert records matching the indicated list below into the table called 'tblOrders'
+Record List: (8, 07-12-2011)
+(6, '08-12-2011')
+(7, '09-12-2011')
+(3, '01-12-2011')
+(1, '07-12-2012')
+(2, '07-18-2010')
+(4, '12-25-2001')
+(5, '09-19-2014')
+4. Select and display all the records from each of the two tables and display their results to verify their creation.
+5. Select only those records from the 'tblOrders' table with a date greater than September 20, 2011 and display the results.
+
+*** Answer:
+#+BEGIN_SRC 
+INSERT INTO tblVendors (vendorName) VALUES ('IBM'), ('Oracle'), ('Verizon'), ('Walmart'), ('Time Warnder'), ('LG'), ('Sony'), ('Panasonic');
+Query OK, 8 rows affected (0.01 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+MariaDB [dbTest]> SELECT * FROM tblVendors;
++----------+--------------+
+| vendorID | vendorName   |
++----------+--------------+
+|        1 | IBM          |
+|        2 | Oracle       |
+|        3 | Verizon      |
+|        4 | Walmart      |
+|        5 | Time Warnder |
+|        6 | LG           |
+|        7 | Sony         |
+|        8 | Panasonic    |
++----------+--------------+
+8 rows in set (0.00 sec)
+
+INSERT INTO tblOrders (orderVendorID, orderDate) VALUES (6, '2011-08-12'), (7, '2011-09-12'), (3, '2011-01-12'), (1, '2012-07-12'), (2, '2010-07-18'), (4, '2001-12-25'), (5, '2014-09-19');
+
+SELECT * FROM tblOrders WHERE orderDate > '2011-09-20';
++---------+---------------+------------+
+| orderID | orderVendorID | orderDate  |
++---------+---------------+------------+
+|      27 |             1 | 2012-07-12 |
+|      30 |             5 | 2014-09-19 |
++---------+---------------+------------+
+
+#+END_SRC
+   
+** Exercise: Count Records and Execute Functions in a Table
+   1. Logged into the MySQL instance used in our previous exercises as the 'testuser' and using the 'dbTest' database, obtain a count of the records in each of the tables 'tblOrders' and 'tblVendors'.
+2. Using a single SQL statement, obtain a count of all records in both tables combined and display the result.
+3. Select all records in the tblOrders database but sort the output in reverse order.
+4. Select all records in the tblOrders database and sort in date order.
+5. Select all the Vendor IDs from the 'tblorders' table greater than 4 and add them using a single query.
+   
+*** Answer:
+   
+#+BEGIN_SRC 
+
+SELECT COUNT(*) FROM tblVendors;
++----------+
+| COUNT(*) |
++----------+
+|        8 |
++----------+
+SELECT (SELECT COUNT('*') FROM tblOrders) + (SELECT COUNT('*') FROM tblVendors);
++--------------------------------------------------------------------------+
+| (SELECT COUNT('*') FROM tblOrders) + (SELECT COUNT('*') FROM tblVendors) |
++--------------------------------------------------------------------------+
+|                                                                       16 |
++--------------------------------------------------------------------------+
+
+SELECT * FROM tblOrders ORDER By orderID DESC;
++---------+---------------+------------+
+| orderID | orderVendorID | orderDate  |
++---------+---------------+------------+
+|      30 |             5 | 2014-09-19 |
+|      29 |             4 | 2001-12-25 |
+|      28 |             2 | 2010-07-18 |
+|      27 |             1 | 2012-07-12 |
+|      26 |             3 | 2011-01-12 |
+|      25 |             7 | 2011-09-12 |
+|      24 |             6 | 2011-08-12 |
+|      23 |             8 | 2011-07-12 |
++---------+---------------+------------+
+
+SELECT * FROM tblOrders ORDER BY orderDate;
++---------+---------------+------------+
+| orderID | orderVendorID | orderDate  |
++---------+---------------+------------+
+|      29 |             4 | 2001-12-25 |
+|      28 |             2 | 2010-07-18 |
+|      26 |             3 | 2011-01-12 |
+|      23 |             8 | 2011-07-12 |
+|      24 |             6 | 2011-08-12 |
+|      25 |             7 | 2011-09-12 |
+|      27 |             1 | 2012-07-12 |
+|      30 |             5 | 2014-09-19 |
++---------+---------------+------------+
+
+SELECT * FROM tblOrders WHERE orderVendorID > 4;
++---------+---------------+------------+
+| orderID | orderVendorID | orderDate  |
++---------+---------------+------------+
+|      23 |             8 | 2011-07-12 |
+|      24 |             6 | 2011-08-12 |
+|      25 |             7 | 2011-09-12 |
+|      30 |             5 | 2014-09-19 |
++---------+---------------+------------+
+
+#+END_SRC
+
+** Exercise: Use Join to view multi-table data;
+
+1. Log into the MySQL databases instance called 'dbTest' with the user id 'testuser' that has been previously provisioned in our exercises.
+2. Using an 'inner join', return all rows from the Vendors and Orders table where there is a matching Vendor ID value in BOTH the Vendors and Orders tables.
+3. Using a 'left outer join' return all rows from the Vendors table and ONLY those rows from the Orders table where the joined fields are equal. Order the results by Vendor ID.
+4. Write a query that can display the Vendor table ID and Name along with the Order ID from the Orders table for each order, use a join or other multi-table syntax.
+
+*** Answers:
+2. Answer:
+#+BEGIN_SRC 
+   
+SELECT * FROM tblVendors INNER JOIN tblOrders ON tblVendors.vendorID=tblOrders.orderVendorID;
++----------+--------------+---------+---------------+------------+
+| vendorID | vendorName   | orderID | orderVendorID | orderDate  |
++----------+--------------+---------+---------------+------------+
+|        8 | Panasonic    |      23 |             8 | 2011-07-12 |
+|        6 | LG           |      24 |             6 | 2011-08-12 |
+|        7 | Sony         |      25 |             7 | 2011-09-12 |
+|        3 | Verizon      |      26 |             3 | 2011-01-12 |
+|        1 | IBM          |      27 |             1 | 2012-07-12 |
+|        2 | Oracle       |      28 |             2 | 2010-07-18 |
+|        4 | Walmart      |      29 |             4 | 2001-12-25 |
+|        5 | Time Warnder |      30 |             5 | 2014-09-19 |
++----------+--------------+---------+---------------+------------+
+
+3. Answer
+SELECT * FROM tblVendors LEFT OUTER JOIN tblOrders ON tblVendors.vendorID=tblOrders.orderVendorID ORDER BY tblVendors.vendorID;
++----------+--------------+---------+---------------+------------+
+| vendorID | vendorName   | orderID | orderVendorID | orderDate  |
++----------+--------------+---------+---------------+------------+
+|        1 | IBM          |      27 |             1 | 2012-07-12 |
+|        2 | Oracle       |      28 |             2 | 2010-07-18 |
+|        3 | Verizon      |      26 |             3 | 2011-01-12 |
+|        4 | Walmart      |      29 |             4 | 2001-12-25 |
+|        5 | Time Warnder |      30 |             5 | 2014-09-19 |
+|        6 | LG           |      24 |             6 | 2011-08-12 |
+|        7 | Sony         |      25 |             7 | 2011-09-12 |
+|        8 | Panasonic    |      23 |             8 | 2011-07-12 |
++----------+--------------+---------+---------------+------------+
+4. Answer
+
+SELECT tblVendors.vendorID, tblVendors.vendorName, tblOrders.orderID FROM tblVendors INNER JOIN tblOrders ON tblVendors.vendorID=tblOrders.orderVendorID;
++----------+--------------+---------+
+| vendorID | vendorName   | orderID |
++----------+--------------+---------+
+|        8 | Panasonic    |      23 |
+|        6 | LG           |      24 |
+|        7 | Sony         |      25 |
+|        3 | Verizon      |      26 |
+|        1 | IBM          |      27 |
+|        2 | Oracle       |      28 |
+|        4 | Walmart      |      29 |
+|        5 | Time Warnder |      30 |
++----------+--------------+---------+
+#+END_SRC
+
+
+** Exercise: Sort Records and Determine Min/Max Values
+1. While logged in as the 'testuser' in MySQL, using the 'dbTest' database created earlier.
+2. Select all the records in the Vendors Table and sort them alphabetically on the Vendor's Name.
+   #+BEGIN_SRC 
+   SELECT * FROM tblVendors ORDER BY vendorName ASC;
++----------+--------------+
+| vendorID | vendorName   |
++----------+--------------+
+|        1 | IBM          |
+|        6 | LG           |
+|        2 | Oracle       |
+|        8 | Panasonic    |
+|        7 | Sony         |
+|        5 | Time Warnder |
+|        3 | Verizon      |
+|        4 | Walmart      |
++----------+--------------+
+
+   #+END_SRC
+3. Select all the records in the Vendors Table and sort them reverse numerically on the Vendor's ID.
+   #+BEGIN_SRC 
+   SELECT * FROM tblVendors ORDER BY vendorId DESC;
++----------+--------------+
+| vendorID | vendorName   |
++----------+--------------+
+|        8 | Panasonic    |
+|        7 | Sony         |
+|        6 | LG           |
+|        5 | Time Warnder |
+|        4 | Walmart      |
+|        3 | Verizon      |
+|        2 | Oracle       |
+|        1 | IBM          |
++----------+--------------+
+
+   #+END_SRC
+
+4. Select all orders in the Orders table after January 1st, 2012 and order by the date.
+5. Write two queries, one that will provide the minimum Vendor ID in the Vendor's Table and one that will provide the maximum Order ID in the Order's table.
+
