@@ -1,4 +1,4 @@
-* Lessons 1
+* Lesson 1
 ** Lecture: Installation and Service Configuration
 We are ready to install our PostgreSQL database engine. We will talk about where
  to obtain the latest copy and configure our system for installing it. After 
@@ -96,7 +96,6 @@ postgres=# \q
 
 #+END_SRC
 
-
 ** Exercises
 *** Exercise: Exercise: Install and Configure PostgreSQL 9.x: RHEL/CentOS
 NOTE: These exercises can be completed on Linux Academy Lab Servers runniing CentOS 7 and logged in as the root user.
@@ -112,3 +111,381 @@ NOTE: These exercises can be completed on a Linux Academy Lab Server running Ubu
 2. Become the user 'postgres'. Run the 'psql' command and once you are at the DB prompt, run the appropriate command to set a password for the 'postgres' user in the database.
 3. While at the DB command prompt, create the 'adminpack' extension in the database. Log out of the DB prompt.
 4. Using the appropriate service management command, restart the PostgreSQL database.
+* Lesson 2 Creating Databases
+This video will show you how to create PostgreSQL databases from the shell as 
+well as using the PSQL client.
+
+man createdb
+
+#+BEGIN_SRC 
+postgres@jodiemacns2:~$ man createdb
+postgres@jodiemacns2:~$ createdb mytestdb
+postgres@jodiemacns2:~$ psql
+psql (9.3.15)
+Type "help" for help.
+
+postgres=# \connect mytestdb
+You are now connected to database "mytestdb" as user "postgres".
+mytestdb=# CREATE DATABASE mytestdb2
+mytestdb-# \connect mytestdb2
+FATAL:  database "mytestdb2" does not exist
+Previous connection kept
+mytestdb-# \q
+postgres@jodiemacns2:~$ psql
+psql (9.3.15)
+Type "help" for help.
+postgres=# CREATE DATABASE db_test
+postgres-# \connect db_test
+FATAL:  database "db_test" does not exist
+Previous connection kept
+
+
+postgres=# CREATE DATABASE db_test
+postgres-# \connect db_test
+FATAL:  database "db_test" does not exist
+Previous connection kept
+postgres-# psql
+postgres-# \q
+postgres@jodiemacns2:~$ psql
+psql (9.3.15)
+Type "help" for help.
+
+postgres=# CREATE DATABASE db_test;
+CREATE DATABASE
+postgres=# \connect db_test;
+You are now connected to database "db_test" as user "postgres".
+db_test=# \connect mytestdb
+You are now connected to database "mytestdb" as user "postgres".
+mytestdb=# \connect db_test
+You are now connected to database "db_test" as user "postgres".
+db_test=# DROP DATABASE db_test;
+ERROR:  cannot drop the currently open database
+db_test=# \connect mytestdb
+You are now connected to database "mytestdb" as user "postgres".
+mytestdb=# DROP DATABASE db_test;
+DROP DATABASE
+
+#+END_SRC
+** Creating Tables
+Now that we have created our databases, we can now look to create the schema, 
+or table structures that will contain our data.
+
+#+BEGIN_SRC 
+postgres@jodiemacns2:~$ psql mytestdb
+psql (9.3.15)
+Type "help" for help.
+
+mytestdb=# CREATE TABLE cities (
+mytestdb(# cityid varchar(5), 
+mytestdb(# cityname varchar(80),
+mytestdb(# state varchar(20) );
+CREATE TABLE
+mytestdb=# INSERT INTO cities VALUES (
+mytestdb(# 'Cincinnati',
+mytestdb(# 'Ohio'^C
+mytestdb=# INSERT INTO cities VALUES (
+mytestdb(# 12345,
+mytestdb(# 'Cincinnati',
+mytestdb(# 'Ohio');
+INSERT 0 1
+mytestdb=# SELECT * FROM cities;
+ cityid |  cityname  | state 
+--------+------------+-------
+ 12345  | Cincinnati | Ohio
+(1 row)
+
+mytestdb=# 
+
+#+END_SRC
+
+** Lecture: Roles - Creating and Deleting Users
+With the creation of our database and some basic schema objects (tables) that 
+can house our data, we have to know how to create users and give them 
+permissions to do certain activities within our databases.
+
+#+BEGIN_SRC 
+postgres@jodiemacns2:~$ createuser mytestuser
+postgres@jodiemacns2:~$ createdb mytestuser
+postgres@jodiemacns2:~$ psql -U mytestuser
+psql: FATAL:  Peer authentication failed for user "mytestuser"
+postgres@jodiemacns2:~$ psql
+psql (9.3.15)
+Type "help" for help.
+
+postgres=# ALTER USER mytesetuser WITH PASSWORD 'password';
+ERROR:  role "mytesetuser" does not exist
+postgres=# ALTER USER mytestuser WITH PASSWORD 'password';
+ALTER ROLE
+postgres=# \q
+postgres@jodiemacns2:~$ exit
+
+vim /etc/postgresql/9.3/main/pg_hba.conf 
+
+
+#+END_SRC
+
+Allow us to log in via the command line:
+#+BEGIN_SRC 
+ vim /etc/postgresql/9.3/main/pg_hba.conf 
+#+END_SRC
+
+#+BEGIN_SRC 
+<<<<< # Database administrative login by Unix domain socket
+<<<<< local   all             postgres                                peer
+<<<<< 
+<<<<< # TYPE  DATABASE        USER            ADDRESS                 METHOD
+<<<<< 
+<<<<< # "local" is for Unix domain socket connections only
+<<<<< local   all             all                                     peer
+<<<<< # IPv4 local connections:
+<<<<< host    all             all             127.0.0.1/32            md5
+<<<<< # IPv6 local connections:
+<<<<< host    all             all             ::1/128                 md5
+
+
+>>>>> # Database administrative login by Unix domain socket
+>>>>> local   all             postgres                                password
+>>>>> 
+>>>>> # TYPE  DATABASE        USER            ADDRESS                 METHOD
+>>>>> 
+>>>>> # "local" is for Unix domain socket connections only
+>>>>> local   all             all                                     password
+>>>>> # IPv4 local connections:
+>>>>> host    all             all             127.0.0.1/32            password
+>>>>> # IPv6 local connections:
+>>>>> host    all             all             ::1/128                 md5
+
+#+END_SRC
+
+Re do with the new user
+
+#+BEGIN_SRC 
+root@jodiemacns2:~# sudo su - postgres
+postgres@jodiemacns2:~$ psql -U mytestuser
+psql: FATAL:  Peer authentication failed for user "mytestuser"
+postgres@jodiemacns2:~$ exit
+logout
+root@jodiemacns2:~# sudo service postgresql restart
+ * Restarting PostgreSQL 9.3 database server
+   ...done.
+root@jodiemacns2:~# sudo su - postgres
+postgres@jodiemacns2:~$ psql -U mytestuser
+Password for user mytestuser: 
+psql (9.3.15)
+Type "help" for help.
+
+#+END_SRC
+Password was previously set to 'password'.
+
+#+BEGIN_SRC 
+mytestuser=> CREATE TABLE testTable ( testID varchar(2));
+CREATE TABLE
+mytestuser=> \quit
+postgres@jodiemacns2:~$ dropuser mytesetuser
+Password: 
+dropuser: could not connect to database postgres: FATAL:  password authentication failed for user "postgres"
+postgres@jodiemacns2:~$ dropuser mytesetuser
+Password: 
+dropuser: removal of role "mytesetuser" failed: ERROR:  role "mytesetuser" does not exist
+
+postgres@jodiemacns2:~$ dropdb mytestuser
+Password: 
+postgres@jodiemacns2:~$ psql -U mytestuser
+Password for user mytestuser: 
+psql: FATAL:  database "mytestuser" does not exist
+
+
+#+END_SRC
+
+**  Lecture: Roles - Assigning Permissions
+We have databases, we have tables and schema, we have users with no permissions!
+Let's add the ability for our users to see, access and "do some stuff" within 
+those databases.
+
+#+BEGIN_SRC 
+postgres@jodiemacns2:~$ psql
+Password: 
+psql (9.3.15)
+Type "help" for help.
+
+postgres=# CREATE DATABASE dbtest;
+CREATE DATABASE
+postgres=# \connect dbtest;
+You are now connected to database "dbtest" as user "postgres".
+dbtest=# CREATE TABLE tblTest ( testID varchar(5), testName varchar(10));
+CREATE TABLE
+dbtest=# \q
+postgres@jodiemacns2:~$ createuser test
+Password: 
+postgres@jodiemacns2:~$ psql 
+Password: 
+psql (9.3.15)
+Type "help" for help.
+
+postgres=# ALTER USER test WITH PASSWORD 'password';
+ALTER ROLE
+postgres=# \q
+postgres@jodiemacns2:~$ psql -U test
+Password for user test: 
+psql: FATAL:  database "test" does not exist
+postgres@jodiemacns2:~$ 
+postgres@jodiemacns2:~$ createdb test
+Password: 
+postgres@jodiemacns2:~$ psql -U test
+Password for user test: 
+psql (9.3.15)
+Type "help" for help.
+
+test=> 
+test=> \connect dbtest
+You are now connected to database "dbtest" as user "test".
+dbtest=> INSERT INTO tblTest VALUES ('001', 'Name');
+ERROR:  permission denied for relation tbltest
+dbtest=> \du
+                              List of roles
+ Role name  |                   Attributes                   | Member of 
+------------+------------------------------------------------+-----------
+ mytestuser |                                                | {}
+ postgres   | Superuser, Create role, Create DB, Replication | {}
+ test       |                                                | {}
+
+dbtest=> \q
+postgres@jodiemacns2:~$ 
+
+postgres@jodiemacns2:~$ psql
+Password: 
+psql (9.3.15)
+Type "help" for help.
+
+postgres=# \connect dbtest
+You are now connected to database "dbtest" as user "postgres".
+dbtest=# GRANT INSERT ON tblTest TO test;
+GRANT
+dbtest=# 
+dbtest=# \q
+postgres@jodiemacns2:~$ psql -U test
+Password for user test: 
+psql (9.3.15)
+Type "help" for help.
+
+test=> \connect dbtest
+You are now connected to database "dbtest" as user "test".
+dbtest=> INSERT INTO tblTest VALUES ('001', 'Name');
+INSERT 0 1
+dbtest=> select * from tblTest;
+ERROR:  permission denied for relation tbltest
+dbtest=> \q
+
+
+dbtest=> \q
+postgres@jodiemacns2:~$ psql
+Password: 
+psql (9.3.15)
+Type "help" for help.
+
+postgres=# \connect dbtest
+You are now connected to database "dbtest" as user "postgres".
+dbtest=# GRANT ALL ON dbtest TO test;
+ERROR:  relation "dbtest" does not exist
+dbtest=# GRANT ALL ON tblTest TO test;
+GRANT
+dbtest=# \q
+postgres@jodiemacns2:~$ psql -U test
+Password for user test: 
+psql (9.3.15)
+Type "help" for help.
+
+test=> \connect dbtest;
+You are now connected to database "dbtest" as user "test".
+dbtest=> SELECT * FROM tblTest;
+ testid | testname 
+--------+----------
+ 001    | Name
+(1 row)
+
+
+#+END_SRC
+
+** Lecture: Installing and Configuring myPgAdmin
+
+In this video we will show where to pull down and how to install phpPgAdmin 
+(similar to phpMyAdmin for MySQL/Mariadb).
+
+
+*** Centos 7
+#+BEGIN_SRC 
+sudo yum install epel-release
+sudo systemctl restart postgresql-9.5
+
+sudo yum install phpPgAdmin httpd
+[jodie@jodiemacns1 ~]$ cd /etc/httpd/
+[jodie@jodiemacns1 httpd]$ cd conf.d
+[jodie@jodiemacns1 conf.d]$ ls
+autoindex.conf  php.conf  phpPgAdmin.conf  README  userdir.conf  welcome.conf
+vim phpPgAdmin.conf 
+
+#+END_SRC
+
+pgpPgAdmin.conf
+#+BEGIN_SRC 
+#
+# This configuration file maps the phpPgAdmin directory into the URL space. 
+# By default this application is only accessible from the local host.
+#
+
+Alias /phpPgAdmin /usr/share/phpPgAdmin
+
+<Location /phpPgAdmin>
+    <IfModule mod_authz_core.c>
+        # Apache 2.4
+#        Require local
+        Require all granted
+        #Require host example.com
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        # Apache 2.2
+        Order deny,allow
+#        Deny from all
+        Allow from all
+        Allow from 127.0.0.1
+#        Allow from ::1
+        # Allow from .example.com
+    </IfModule>
+</Location>
+
+#+END_SRC
+
+#+BEGIN_SRC 
+
+[jodie@jodiemacns1 conf.d]$ sudo systemctl enable httpd
+Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service to /usr/lib/systemd/system/httpd.service.
+[jodie@jodiemacns1 conf.d]$ sudo systemctl start httpd
+[jodie@jodiemacns1 conf.d]$ ps aux | grep http
+root     29765  0.6  1.2 327816 12400 ?        Ss   20:53   0:00 /usr/sbin/httpd -DFOREGROUND
+apache   29766  0.0  0.6 327952  6312 ?        S    20:53   0:00 /usr/sbin/httpd -DFOREGROUND
+apache   29767  0.0  0.6 327952  6312 ?        S    20:53   0:00 /usr/sbin/httpd -DFOREGROUND
+apache   29768  0.0  0.6 327952  6312 ?        S    20:53   0:00 /usr/sbin/httpd -DFOREGROUND
+apache   29769  0.0  0.6 327952  6312 ?        S    20:53   0:00 /usr/sbin/httpd -DFOREGROUND
+apache   29770  0.0  0.6 327952  6312 ?        S    20:53   0:00 /usr/sbin/httpd -DFOREGROUND
+jodie    29772  0.0  0.0 112648   964 pts/0    R+   20:53   0:00 grep --color=auto http
+
+[jodie@jodiemacns1 conf.d]$ cd /etc/phpPgAdmin/
+[jodie@jodiemacns1 phpPgAdmin]$ vim config.inc.php
+
+#+END_SRC
+#+BEGIN_SRC 
+  $conf['servers'][0]['host'] = '';
+To
+        $conf['servers'][0]['host'] = 'localhost';
+
+        $conf['extra_login_security'] = true;
+To
+        $conf['extra_login_security'] = false;
+
+        $conf['owned_only'] = false;
+To
+        $conf['owned_only'] = true;
+sudo systemctl restart httpd
+sudo systemctl restart postgresql-9.5
+w3m localhost/phpPgAdmin   
+#+END_SRC
