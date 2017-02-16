@@ -1,2 +1,2 @@
-# linuxacademy
+# LA
 Learning
